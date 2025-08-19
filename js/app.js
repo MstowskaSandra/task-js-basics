@@ -12,11 +12,74 @@ Calculator.prototype.getHistoryAsString = function() {
 }
 
 Calculator.prototype.add = function(num1, num2) {
-    // 1. zamień wartości przekazane przez parametr na typ number
-    // 2. sprawdź czy są one poprawne
-    // 3. jeśli tak to wykonaj działanie i zapisz jego resultat
-    // 4. dodaj do historii operacji to działanie w fomie: 1 + 1 = 2
+    num1 = Number(num1);
+    num2 = Number(num2);
+
+    if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
+        return;
+    }
+
+    const result = num1 + num2;
+    this.history.push(`${num1} + ${num2} = ${result}`);
 }
+
+Calculator.prototype.subtraction = function(num1, num2) {
+    num1 = Number(num1);
+    num2 = Number(num2);
+
+    if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane!");
+        return;
+    }
+
+    const result = num1 - num2;
+    this.history.push(`${num1} - ${num2} = ${result}`);
+}
+
+Calculator.prototype.multiplication = function(num1, num2) {
+    num1 = Number(num1);
+    num2 = Number(num2);
+
+    if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
+        return;
+    }
+
+    const result = num1 * num2;
+    this.history.push(`${num1} * ${num2} = ${result}`)
+}
+
+Calculator.prototype.division = function(num1, num2) {
+    num1 = Number(num1);
+    num2 = Number(num2);
+
+    if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
+        return;
+    }
+
+    const result = num1 / num2;
+    this.history.push(`${num1} / ${num2} = ${result}`)
+}
+
+Calculator.prototype.exponentiation = function(num1, num2) {
+    num1 = Number(num1);
+    num2 = Number(num2);
+
+    if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
+        return;
+    }
+
+    let result = 1;
+    for(let i = 0; i< num2; i++){
+        result *= num1;
+    }
+    this.history.push(`${num1} ^ ${num2} = ${result}`)
+}
+
+
 
 const calc = new Calculator();
 let action, promptContent, isCorrectAction, number1, number2;
@@ -33,6 +96,14 @@ do {
 
         if(action === '+') {
             calc.add(number1, number2);
+        } else if(action === '-') {
+            calc.subtraction(number1, number2);
+        } else if(action === '*') {
+            calc.multiplication(number1, number2);
+        } else if(action === '/') {
+            calc.division(number1, number2);
+        } else if(action === '^') {
+            calc.exponentiation(number1, number2);
         }
     }
     
