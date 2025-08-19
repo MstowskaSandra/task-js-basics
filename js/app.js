@@ -11,75 +11,53 @@ Calculator.prototype.getHistoryAsString = function() {
     return this.history.join('\n');
 }
 
+Calculator.prototype.calculate = function(num1, num2, operator, operatorFunc) {
+     num1 = Number(num1);
+     num2 = Number(num2);
+
+     if(isNaN(num1) || isNaN(num2)) {
+        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
+        return;
+    }
+
+     if(operator === '/' && num2 === 0) {
+        alert("Nie można dzielić przez 0!");
+        return;
+    }
+
+    const result = operatorFunc(num1, num2);
+    this.history.push(`${num1} ${operator} ${num2} = ${result}`);
+    return result;
+}
+
+
 Calculator.prototype.add = function(num1, num2) {
-    num1 = Number(num1);
-    num2 = Number(num2);
-
-    if(isNaN(num1) || isNaN(num2)) {
-        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
-        return;
-    }
-
-    const result = num1 + num2;
-    this.history.push(`${num1} + ${num2} = ${result}`);
+    return this.calculate(num1, num2, '+', (a,b) => a + b);
 }
 
-Calculator.prototype.subtraction = function(num1, num2) {
-    num1 = Number(num1);
-    num2 = Number(num2);
-
-    if(isNaN(num1) || isNaN(num2)) {
-        alert("Podano nieodpowiednie dane!");
-        return;
-    }
-
-    const result = num1 - num2;
-    this.history.push(`${num1} - ${num2} = ${result}`);
-}
-
-Calculator.prototype.multiplication = function(num1, num2) {
-    num1 = Number(num1);
-    num2 = Number(num2);
-
-    if(isNaN(num1) || isNaN(num2)) {
-        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
-        return;
-    }
-
-    const result = num1 * num2;
-    this.history.push(`${num1} * ${num2} = ${result}`)
-}
-
-Calculator.prototype.division = function(num1, num2) {
-    num1 = Number(num1);
-    num2 = Number(num2);
-
-    if(isNaN(num1) || isNaN(num2)) {
-        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
-        return;
-    }
-
-    const result = num1 / num2;
-    this.history.push(`${num1} / ${num2} = ${result}`)
-}
-
-Calculator.prototype.exponentiation = function(num1, num2) {
-    num1 = Number(num1);
-    num2 = Number(num2);
-
-    if(isNaN(num1) || isNaN(num2)) {
-        alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
-        return;
-    }
-
-    let result = 1;
-    for(let i = 0; i< num2; i++){
-        result *= num1;
-    }
-    this.history.push(`${num1} ^ ${num2} = ${result}`)
+Calculator.prototype.subtract = function(num1, num2) {
+    return this.calculate(num1, num2, '-', (a,b) => a - b);
 }
 
 
+Calculator.prototype.multiply = function(num1, num2) {
+    return this.calculate(num1, num2, '*', (a,b) => a * b);
+}
+
+Calculator.prototype.divide = function(num1, num2) {
+    return this.calculate(num1, num2, '/', (a,b) => a / b);
+}
+
+
+Calculator.prototype.power = function(num1, num2) {
+    return this.calculate(num1, num2, '^', (a,b) => {
+        let result = 1;
+        for(let i = 0; i < b; i++) {
+            result *= a;
+        }
+        return result;
+    });
+}
 
 const calc = new Calculator();
 let action, promptContent, isCorrectAction, number1, number2;
@@ -97,13 +75,13 @@ do {
         if(action === '+') {
             calc.add(number1, number2);
         } else if(action === '-') {
-            calc.subtraction(number1, number2);
+            calc.subtract(number1, number2);
         } else if(action === '*') {
-            calc.multiplication(number1, number2);
+            calc.multiply(number1, number2);
         } else if(action === '/') {
-            calc.division(number1, number2);
+            calc.divide(number1, number2);
         } else if(action === '^') {
-            calc.exponentiation(number1, number2);
+            calc.power(number1, number2);
         }
     }
     
