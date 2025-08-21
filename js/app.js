@@ -1,10 +1,20 @@
 function Calculator() {
-    this.actions = ['+', '-', '*', '/', '^'];
+    this.actions = [
+        { symbol: '+', func: this.add.bind(this) },
+        { symbol: '-', func: this.subtract.bind(this) },
+        { symbol: '*', func: this.multiply.bind(this) },
+        { symbol: '/', func: this.divide.bind(this) },
+        { symbol: '^', func: this.power.bind(this) },
+    ];
     this.history = [];
 }
 
 Calculator.prototype.isCorrectAction = function(action) {
-    return this.actions.includes(action);
+    return this.actions.some(op => op.symbol === action);
+}
+
+Calculator.prototype.getOperation = function(symbol) {
+    return this.actions.find(op => op.symbol === symbol);
 }
 
 Calculator.prototype.getHistoryAsString = function() {
@@ -19,8 +29,6 @@ Calculator.prototype.calculate = function(num1, num2, operator, operatorFunc) {
         alert("Podano nieodpowiednie dane! Możesz użyć tylko liczb");
         return;
     }
-
-     
 
     const result = operatorFunc(num1, num2);
     this.history.push(`${num1} ${operator} ${num2} = ${result}`);
@@ -61,13 +69,6 @@ Calculator.prototype.power = function(num1, num2) {
 }
 
 const calc = new Calculator();
-const operations = {
-    '+': (a, b) => calc.add(a, b),
-    '-': (a, b) => calc.subtract(a, b),
-    '*': (a, b) => calc.multiply(a, b),
-    '/': (a, b) => calc.divide(a, b),
-    '^': (a, b) => calc.power(a, b),
-};
 
 let action, promptContent, isCorrectAction, number1, number2;
 do { 
@@ -76,11 +77,13 @@ do {
     promptContent += 'Lista poprzednich operacji: \n' + calc.getHistoryAsString();
 
     action = prompt(promptContent);
+    
     isCorrectAction = calc.isCorrectAction(action);
     if(isCorrectAction) {
         number1 = prompt('Podaj liczbę nr 1');
         number2 = prompt('Podaj liczbę nr 2');
-        operations[action](number1, number2);
+        const operation = calc.getOperation(action);
+        operation.func(number1, number2);
     }
     
 } while(calc.isCorrectAction(action));
